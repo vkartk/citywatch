@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load compress %}
+
+{% block content %}
+<div class="container city-bg h-[60vh] md:mt-10 mx-auto md:rounded-3xl flex items-center">
+    <div class="text-white m-10">
+        <h2> Welcome to CityWatch</h1>
+        <h1 class="text-6xl font-bold mb-2"> Help improve your city</h1>
+        <p class="text-base mb-4">Is there something in your community that needs fixing? Report it here.</p>
+        <a class="bg-primary py-2 px-3 rounded-xl text-black" href="">Report an issue</a>
+    </div>
+</div>
+
+<div class="container mx-auto md:mt-10">
+    <div id="map" class="md:rounded-3xl h-[60vh] sm:max-h-screen"></div>
+</div>
+
+<div class="container  mx-auto my-4">
+    <div class="rounded-xl p-2 md:flex items-center border border-[secondary]">
+        <div class="p-4">
+            <h3 class="text-xl font-bold mb-2">How to Report</h3>
+            <p class="text-base"> Let us know if you see a problem with things like potholes, graffiti, broken sidewalks, storm drains,
+                traffic signals, street lights, or other issues. You can also report issues on private property that
+                affect public safety or the environment.</p>
+        </div>
+        <div class="flex-none p-4">
+            <a class="bg-primary py-2 px-3 rounded-xl text-black" href="">Report an issue</a>
+        </div>
+</div>
+
+<div class="container mx-auto">
+    <h2 class="text-2xl font-bold my-4">Recent Reports</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="rounded-xl p-2 border border-[secondary]">
+            <h3 class="text-xl font-bold mb-2">Pothole</h3>
+            <p class="text-base">There is a pothole on the corner of 5th and Main</p>
+        </div>
+        <div class="rounded-xl p-2 border border-[secondary]">
+            <h3 class="text-xl font-bold mb-2">Graffiti</h3>
+            <p class="text-base">There is graffiti on the side of the library</p>
+        </div>
+        <div class="rounded-xl p-2 border border-[secondary]">
+            <h3 class="text-xl font-bold mb-2">Broken Sidewalk</h3>
+            <p class="text-base">There is a broken sidewalk on 3rd street</p>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block page_scripts %}
+    {% compress js %}
+    <script src="{% static 'scripts/map.js' %}"></script>
+    {% endcompress %}
+    <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+     <!-- prettier-ignore -->
+ <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+    ({key: "AIzaSyBb0ejwhhOlIDo7RclYRdH8Rl0OgC5CyL4", v: "weekly"});</script>
+{% endblock %}
+
+

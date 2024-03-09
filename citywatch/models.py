@@ -8,6 +8,13 @@ class Issue(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='images/issue/')
     category = models.ForeignKey('IssueCategory', on_delete=models.CASCADE)
 
+    STATUS_CHOICES = (
+        ('OPEN', 'Open'),
+        ('IN_PROGRESS', 'In Progress'),
+        ('RESOLVED', 'Resolved'),
+    )
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='OPEN')
+
     latitude = models.FloatField()
     longitude = models.FloatField()
 

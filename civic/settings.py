@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'civic',
+    'citywatch',
     'compressor',
 ]
 
@@ -128,3 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 COMPRESS_ENABLED = True
 COMPRESS_ROOT = BASE_DIR / 'static'
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
+# Media settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media/'

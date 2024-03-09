@@ -16,12 +16,10 @@
             affect public safety or the environment.</p>
         <form>
             <div class="space-y-4 mt-8">
-                {% render_field form.name placeholder="Name" class="px-2 py-3 w-full text-sm" %}
-                {% render_field form.phoneNo placeholder="Phone No." class="px-2 py-3 w-full text-sm"%}
-                {% render_field form.email placeholder="Email" class="px-2 py-3 w-full text-sm"%}
+                {% render_field form.title placeholder="Title" class="px-2 py-3 w-full text-sm" %}
                 {% render_field form.category placeholder="Category" class="px-2 py-3 w-full text-sm"%}
+                {% render_field form.location placeholder="Location" class="px-2 py-3 w-full text-sm"%}
 
-                {% render_field form.street placeholder="Street" class="px-2 py-3 w-full text-sm"%}
                 <div class="grid grid-cols-2 gap-6">
                     {% render_field form.city placeholder="City" class="px-2 py-3 w-full text-sm"%}
                     {% render_field form.pinCode placeholder="Pincode" class="px-2 py-3 w-full text-sm"%}
@@ -53,7 +51,7 @@
       <p class="text-xs text-gray-400 mt-2">PNG, JPG SVG, WEBP, and GIF are Allowed.</p>
     </label>
 
-                {% render_field form.message placeholder="Describe the issue..." class="px-2 py-3 w-full text-sm"%}
+                {% render_field form.description placeholder="Describe the issue..." class="px-2 py-3 w-full text-sm"%}
             </div>
 
             <button type="button"

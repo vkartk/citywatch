@@ -15,8 +15,8 @@ class Issue(models.Model):
     )
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='OPEN')
 
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,7 +27,8 @@ class Issue(models.Model):
 
 class IssueCategory(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
+
 
     def __str__(self):
         return self.name

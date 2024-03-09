@@ -33,19 +33,14 @@
 <div class="container mx-auto">
     <h2 class="text-2xl font-bold my-4">Recent Reports</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for issue in issues %}
         <div class="rounded-xl p-2 border border-[secondary]">
-            <h3 class="text-xl font-bold mb-2">Pothole</h3>
-            <p class="text-base">There is a pothole on the corner of 5th and Main</p>
+            <h3 class="text-xl font-bold mb-2">{{ issue.title }}</h3>
+            <p class="text-base">{{ issue.description }}</p>
         </div>
-        <div class="rounded-xl p-2 border border-[secondary]">
-            <h3 class="text-xl font-bold mb-2">Graffiti</h3>
-            <p class="text-base">There is graffiti on the side of the library</p>
-        </div>
-        <div class="rounded-xl p-2 border border-[secondary]">
-            <h3 class="text-xl font-bold mb-2">Broken Sidewalk</h3>
-            <p class="text-base">There is a broken sidewalk on 3rd street</p>
-        </div>
+        {% endfor %}
     </div>
+    
 
 </div>
 

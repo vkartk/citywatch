@@ -1,16 +1,19 @@
 from django.shortcuts import render
 from django.contrib import messages
+from .models import Issue
 
 from .forms import IssueForm
 
 def home(request):
-    return render(request, 'pages/home.html')
+    issues = Issue.objects.all().order_by('-created_at')
+    return render(request, 'pages/home.html', {"issues": issues})
 
 def map(request):
     return render(request, 'pages/map.html')
 
 def reports(request):
-    return render(request, 'pages/reports.html')
+    issues = Issue.objects.all().order_by('-created_at')
+    return render(request, 'pages/reports.html', {"issues": issues})
 
 def report(request):
     if request.method == "POST":

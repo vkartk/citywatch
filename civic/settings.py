@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'citywatch',
     'compressor',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

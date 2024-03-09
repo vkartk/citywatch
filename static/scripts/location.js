@@ -23,11 +23,17 @@ const showUserLocation = userLocation => {
     initMap(userLocation);
 }
 
+const setUserLocation = userLocation => {
+    document.querySelector('#id_latitude').value = userLocation.lat;
+    document.querySelector('#id_longitude').value = userLocation.lng;
+}
+
 const getLocation = (locationPermission) => {
 
     const successCallback = (position) => {
         console.log(position);
-        userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        let userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+        setUserLocation(userLocation);
         showUserLocation(userLocation);
     };
     

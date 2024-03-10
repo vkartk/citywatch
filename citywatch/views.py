@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+
 from .models import Issue
-from .forms import IssueForm, SignUpForm
+from .forms import IssueForm, SignUpForm, SignInForm
 
 def home(request):
     issues = Issue.objects.all().order_by('-created_at')
@@ -40,3 +42,24 @@ def SignUp(request):
         form = SignUpForm()
 
     return render(request, "pages/auth/signup.html", {"form": form})
+
+def SignIn(request):
+    if request.method == "POST":
+        form = SignInForm(request.POST)
+        if form.is_valid():
+
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Sign in successful!")
+
+        else:
+            messages.error(request, "Sign in failed!")
+
+    else:
+        form = SignInForm()
+
+    return render(request, "pages/auth/signin.html", {"form": form})

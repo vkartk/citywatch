@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load compress %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="max-w-md mx-auto mt-10">
+    <h2 class="text-2xl font-extrabold"> Welcome back</h2>
+    <p class="text-base">Sign in to your Civic Issue Reporting account</p>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="space-y-4 mt-8">
+            {% render_field form.username placeholder="Username" class="px-2 py-3 w-full text-sm rounded-lg" %}
+            {% render_field form.password placeholder="Password" class="px-2 py-3 w-full text-sm rounded-lg" %}
+            <p class=" text-sm text-gray-400 text-center"> Forgot your username or password? </p>
+            <button type="submit" class="bg-primary text-white px-3 py-2 rounded-xl w-full">Sign in</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

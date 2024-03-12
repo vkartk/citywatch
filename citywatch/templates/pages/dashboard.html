@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load compress %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container mx-auto">
+    <h2 class="text-3xl text-center my-8" > My Dashboard</h2>
+
+
+
+<div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 m-4">
+
+    <ul id="tabsContainer" class="flex flex-wrap -mb-px">
+        <li class="me-2 ">
+            <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600" data-tab="Issues">All</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="OpenIssues">Open</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="InProgressIssues">In Progress</a>
+        </li>
+        <li class="me-2">
+            <a href="#" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="ResolvedIssues">Resolved</a>
+        </li>
+    </ul>
+
+    <div id="Issues" class="container my-4 issue-tab">
+        {% for issue in issues %}
+        <div class="flex items-center ">
+            <div>
+                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+            </div>
+            <div class="p-2 w-full text-left ms-4">
+                <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
+                <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
+            </div>
+            <div>
+                <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div id="OpenIssues" class="container my-4 issue-tab">
+        {% for issue in issues %}
+        {% if issue.status == "OPEN" %}
+        <div class="flex items-center ">
+            <div>
+                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+            </div>
+            <div class="p-2 w-full text-left ms-4">
+                <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
+                <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
+            </div>
+            <div>
+                <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+    <div id="InProgressIssues" class="container my-4 issue-tab">
+        {% for issue in issues %}
+        {% if issue.status == "IN_PROGRESS" %}
+        <div class="flex items-center ">
+            <div>
+                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+            </div>
+            <div class="p-2 w-full text-left ms-4">
+                <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
+                <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
+            </div>
+            <div>
+                <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <div id="ResolvedIssues" class="container my-4 issue-tab">
+        {% for issue in issues %}
+        {% if issue.status == "RESOLVED" %}
+        <div class="flex items-center ">
+            <div>
+                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+            </div>
+            <div class="p-2 w-full text-left ms-4">
+                <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
+                <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
+            </div>
+            <a href="">
+                <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+</div>
+
+</div>
+
+{% endblock %}
+
+
+{% block page_scripts %}
+
+{% compress js %}
+<script src="{% static 'scripts/dashboard.js' %}"></script>
+{% endcompress %}
+
+{% endblock %}

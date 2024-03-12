@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
-from .models import Issue
+from .models import Issue, IssueCategory
 from .forms import IssueForm, SignUpForm, SignInForm
 
 def home(request):
@@ -63,3 +63,11 @@ def SignIn(request):
         form = SignInForm()
 
     return render(request, "pages/auth/signin.html", {"form": form})
+
+
+def Dashboard(request):
+
+    issues = Issue.objects.all().order_by('-created_at')
+    categories = IssueCategory.objects.all()
+
+    return render(request, "pages/dashboard.html", {"issues": issues, "categories": categories})

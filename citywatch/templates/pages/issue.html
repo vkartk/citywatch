@@ -9,8 +9,10 @@
 <div class="container my-16 mx-auto md:px-6">
 
     <section class="mb-32">
+      {% if issue.image %}
       <img src="{{ issue.image.url }}"
         class="mb-6 w-full rounded-lg shadow-lg" alt="issue image" />
+      {% endif %}
   
       <div class="mb-6 flex items-center">
         <img src="/static/images/danger-triangle.svg" class="mr-2 h-8 rounded-full" alt="danger-icon"

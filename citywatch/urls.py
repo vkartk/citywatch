@@ -10,8 +10,10 @@ urlpatterns = [
     path('reports/', views.reports, name='reports'),
     path('report/', views.report, name='report'),
     path('issue/<int:id>/', views.IssuePage, name='IssuePage'),
+
     path('signin/', views.SignIn, name='signin'),
     path('signup/', views.SignUp, name='signup'),
+    path('signout/', views.SignOut, name='signout'),
 
     path('dashboard/', views.Dashboard, name='Dashboard'),
 

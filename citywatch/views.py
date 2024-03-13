@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 from .models import Issue, IssueCategory
 from .forms import IssueForm, SignUpForm, SignInForm
@@ -56,6 +56,8 @@ def SignIn(request):
                 login(request, user)
                 messages.success(request, "Sign in successful!")
 
+                return redirect('Dashboard')
+
         else:
             messages.error(request, "Sign in failed!")
 
@@ -64,6 +66,9 @@ def SignIn(request):
 
     return render(request, "pages/auth/signin.html", {"form": form})
 
+def SignOut(request):
+    logout(request)
+    return redirect('home')
 
 def Dashboard(request):
 

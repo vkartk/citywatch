@@ -35,6 +35,14 @@ def SignUp(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Account created successfully!")
+
+            userData = {
+                'username' : form.cleaned_data['username'],
+                'password' : form.cleaned_data['password1'],
+            }
+
+            return handle_SignIn(request, userData)
+
         else:
             messages.error(request, "Account creation failed!")
 
@@ -47,17 +55,12 @@ def SignIn(request):
     if request.method == "POST":
         form = SignInForm(request.POST)
         if form.is_valid():
+            userData = {
+                'username' : form.cleaned_data['username'],
+                'password' : form.cleaned_data['password'],
+            }
 
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, "Sign in successful!")
-
-                return redirect('Dashboard')
-
+            handle_SignIn(request, userData)
         else:
             messages.error(request, "Sign in failed!")
 
@@ -82,3 +85,12 @@ def IssuePage(request, id):
     issue = Issue.objects.get(id=id)
 
     return render(request, "pages/issue.html", {"issue": issue})
+
+def handle_SignIn(request, userData):
+
+    user = authenticate(username=userData['username'], password=userData['password'])
+    if user is not None:
+        login(request, user)
+        messages.success(request, "Sign in successful!")
+
+        return redirect('Dashboard')

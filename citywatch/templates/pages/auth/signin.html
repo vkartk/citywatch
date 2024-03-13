@@ -14,7 +14,7 @@
         <div class="space-y-4 mt-8">
             {% render_field form.username placeholder="Username" class="px-2 py-3 w-full text-sm rounded-lg" %}
             {% render_field form.password placeholder="Password" class="px-2 py-3 w-full text-sm rounded-lg" %}
-            <p class=" text-sm text-gray-400 text-center"> Forgot your username or password? </p>
+            <p class="text-sm text-gray-400 text-center"> Don't have an account? <a href="{% url 'signup' %}" class="text-primary">Create one</a></p>
             <button type="submit" class="bg-primary text-white px-3 py-2 rounded-xl w-full">Sign in</button>
         </div>
     </form>

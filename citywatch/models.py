@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Issue(models.Model):
     title = models.CharField(max_length=100)
@@ -7,6 +8,11 @@ class Issue(models.Model):
 
     image = models.ImageField(blank=True, null=True, upload_to='images/issue/')
     category = models.ForeignKey('IssueCategory', on_delete=models.CASCADE)
+
+    email = models.EmailField()
+
+    city = models.CharField(max_length=100)
+    pinCode = models.IntegerField(validators=[MinValueValidator(100000), MaxValueValidator(999999)])
 
     STATUS_CHOICES = (
         ('OPEN', 'Open'),

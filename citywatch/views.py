@@ -71,3 +71,9 @@ def Dashboard(request):
     categories = IssueCategory.objects.all()
 
     return render(request, "pages/dashboard.html", {"issues": issues, "categories": categories})
+
+def IssuePage(request, id):
+
+    issue = Issue.objects.get(id=id)
+
+    return render(request, "pages/issue.html", {"issue": issue})

@@ -15,15 +15,35 @@
       {% endif %}
   
       <div class="mb-6 flex items-center">
-        <img src="/static/images/danger-triangle.svg" class="mr-2 h-8 rounded-full" alt="danger-icon"
+
+        {% if issue.status == "OPEN" %}
+        <img src="/static/images/danger-circle.svg" class="mr-2 h-8 rounded-full" alt="OpenIssues Icon"
           loading="lazy" />
+        {% elif issue.status == "IN_PROGRESS" %}
+        <img src="/static/images/play-circle.svg" class="mr-2 h-8 rounded-full" alt="InProgress Icon" loading="lazy" />
+        {% else %}
+        <img src="/static/images/check-circle.svg" class="mr-2 h-8 rounded-full" alt="Resolved Icon" loading="lazy" />
+        {% endif %}
+
         <div>
           <span> Reported on {{ issue.created_at }} </span>
           <a href="#!" class="font-medium">[ {{ issue.category }} ]</a>
         </div>
       </div>
   
-      <h1 class="mb-6 text-3xl font-bold"> {{ issue.title }} </h1>
+      <div class="md:flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold mb-4 md:mb-0">  {{ issue.title }}   </h1>
+        
+        {% if issue.status == "OPEN" %}
+          <span class="text-base font-medium bg-red-500 rounded-full py-1.5 px-3 text-white">Open</span>
+        {% elif issue.status == "IN_PROGRESS" %}
+          <span class="text-base font-medium bg-primary rounded-full py-1.5 px-3 text-white">In Progress</span>
+        {% else %}
+          <span class="text-base font-medium bg-green-500 rounded-full py-1.5 px-3 text-white">Resolved</span>
+        {% endif %}
+      
+      </div>
+      
       <p class="">{{ issue.description }}</p>
      
     </section>

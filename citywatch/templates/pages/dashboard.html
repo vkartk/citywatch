@@ -38,9 +38,9 @@
                 <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
                 <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
             </div>
-            <div>
+            <a href="{% url 'IssuePage' id=issue.id %}">
                 <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
-            </div>
+            </a>
         </div>
         {% endfor %}
     </div>
@@ -51,15 +51,15 @@
         {% if issue.status == "OPEN" %}
         <div class="flex items-center ">
             <div>
-                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+                <img src="/static/images/danger-circle.svg" alt="OpenIssues Icon" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
             </div>
             <div class="p-2 w-full text-left ms-4">
                 <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
                 <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
             </div>
-            <div>
+            <a href="{% url 'IssuePage' id=issue.id %}">
                 <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
-            </div>
+            </a>
         </div>
         {% endif %}
         {% endfor %}
@@ -71,15 +71,15 @@
         {% if issue.status == "IN_PROGRESS" %}
         <div class="flex items-center ">
             <div>
-                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+                <img src="/static/images/play-circle.svg" alt="InProgress Icon" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
             </div>
             <div class="p-2 w-full text-left ms-4">
                 <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
                 <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
             </div>
-            <div>
+            <a href="{% url 'IssuePage' id=issue.id %}">
                 <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
-            </div>
+            </a>
         </div>
         {% endif %}
         {% endfor %}
@@ -90,13 +90,13 @@
         {% if issue.status == "RESOLVED" %}
         <div class="flex items-center ">
             <div>
-                <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+                <img src="/static/images/check-circle.svg" alt="Resolved Icon" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
             </div>
             <div class="p-2 w-full text-left ms-4">
                 <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
                 <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
             </div>
-            <a href="">
+            <a href="{% url 'IssuePage' id=issue.id %}">
                 <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
             </a>
         </div>

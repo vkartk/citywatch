@@ -30,6 +30,10 @@ def report(request):
     return render(request, "pages/report.html", {"form": form})
 
 def SignUp(request):
+
+    if request.user.is_authenticated:
+        return redirect('Dashboard')
+    
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -52,6 +56,10 @@ def SignUp(request):
     return render(request, "pages/auth/signup.html", {"form": form})
 
 def SignIn(request):
+
+    if request.user.is_authenticated:
+        return redirect('Dashboard')
+    
     if request.method == "POST":
         form = SignInForm(request.POST)
         if form.is_valid():
@@ -60,7 +68,8 @@ def SignIn(request):
                 'password' : form.cleaned_data['password'],
             }
 
-            handle_SignIn(request, userData)
+            if(handle_SignIn(request, userData)):
+                return redirect('Dashboard')
         else:
             messages.error(request, "Sign in failed!")
 
@@ -74,6 +83,9 @@ def SignOut(request):
     return redirect('home')
 
 def Dashboard(request):
+
+    if not request.user.is_authenticated:
+        return redirect('signin')
 
     issues = Issue.objects.all().order_by('-created_at')
     categories = IssueCategory.objects.all()
@@ -92,5 +104,8 @@ def handle_SignIn(request, userData):
     if user is not None:
         login(request, user)
         messages.success(request, "Sign in successful!")
+        return True
+    
+    return False
 
-        return redirect('Dashboard')
+

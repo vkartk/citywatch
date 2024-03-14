@@ -145,6 +145,10 @@ def CategoryAPI(request, id=None):
         issuesInCategory = Issue.objects.filter(category=category)
         category = category.to_dict()
         category['issueCount'] = issuesInCategory.count()
+
+        for statusKey, statusLabel in Issue.STATUS_CHOICES:
+            category[statusLabel] = issuesInCategory.filter(status=statusKey).count()
+
         return JsonResponse(category)
     else:
         categories = IssueCategory.objects.all()
@@ -153,5 +157,9 @@ def CategoryAPI(request, id=None):
             issuesInCategory = Issue.objects.filter(category=category)
             category = category.to_dict()
             category['issueCount'] = issuesInCategory.count()
+
+            for statusKey, statusLabel in Issue.STATUS_CHOICES:
+                category[statusLabel] = issuesInCategory.filter(status=statusKey).count()
+
             categoryList.append(category)
         return JsonResponse(categoryList, safe=False)

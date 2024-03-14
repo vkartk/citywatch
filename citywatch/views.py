@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 
+import json
 from .models import Issue, IssueCategory
 from .forms import IssueForm, SignUpForm, SignInForm
 from .utils import handle_SignIn, associate_user_issues
@@ -132,12 +133,35 @@ def StaffDashboard(request):
 
 
 def IssueAPI(request, id=None):
-    if id:
+
+    if request.method == "GET":
+        if id:
+            issue = Issue.objects.get(id=id)
+            return JsonResponse(issue.to_dict())
+        else:
+            issues = Issue.objects.all()
+            return JsonResponse([issue.to_dict() for issue in issues], safe=False)
+        
+    if not request.user.is_authenticated or not request.user.is_staff:
+            return JsonResponse({"message": "Unauthorized"}, status=401)
+        
+    if request.method == 'PUT':
         issue = Issue.objects.get(id=id)
+        raw_data = request.body
+        data = json.loads(raw_data.decode())
+        print(data)
+ 
+        issue.status = data['status'] if 'status' in data else issue.status
+        issue.save()
         return JsonResponse(issue.to_dict())
-    else:
-        issues = Issue.objects.all()
-        return JsonResponse([issue.to_dict() for issue in issues], safe=False)    
+                
+
+    
+    if request.method == "DELETE":
+        issue = Issue.objects.get(id=id)
+        issue.delete()
+        return JsonResponse({"message": "Issue deleted successfully!"})
+   
 
 def CategoryAPI(request, id=None):
     if id:

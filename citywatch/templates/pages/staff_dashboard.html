@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load compress %}
+{% load humanize %}
+
+{% block content %}
+
+<div class="container mx-auto">
+    <h2 class="text-3xl my-8">Dashboard</h2>
+
+    <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 m-4">
+        <ul id="tabsContainer" class="flex flex-wrap -mb-px">
+            <li class="me-2">
+                <a href="#Overview" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600" data-tab="Overview">Overview</a>
+            </li>
+            <li class="me-2">
+                <a href="#Issues" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="Issues">Issues</a>
+            </li>
+            <li class="me-2">
+                <a href="#Users" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="Users">Users</a>
+            </li>
+            <li class="me-2">
+                <a href="#Search" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" data-tab="Search">Search</a>
+            </li>
+        </ul>
+
+        <!-- Overview -->
+        <div id="Overview" class="container my-4 dash-tab">
+            <div class="flex items-center justify-between">
+
+                <div class="text-black text-left bg-tertiary w-full m-5 p-8 rounded-xl ">
+                    <p class="text-md mb-2"> Total Issues</p>
+                    <span class=" text-3xl">{{ issues.count }}</span>
+                </div>
+
+                {% for status,count in statusCounts.items %}
+
+                    <div class="text-black text-left bg-tertiary w-full m-5 p-8 rounded-xl ">
+                        <p class="text-md mb-2"> {{ status }} Issues</p>
+                        <span class=" text-3xl">{{ count }}</span>
+                    </div>
+                                
+                {% endfor %}
+            
+            </div>
+
+            <div class="flex">
+                <div class="container my-4 w-[50%] border-r-2">
+                    <h2 class="text-black text-2xl text-left font-bold my-4">Recent Reports</h2>
+                    {% for issue in issues|slice:":5" %}
+                    <div class="flex items-center">
+                        <div>
+                            <img src="/static/images/danger-circle.svg" alt="danger" class="w-12 h-12 p-1.5 bg-gray-300 rounded-xl">
+                        </div>
+                        <div class="p-2 w-full text-left ms-4">
+                            <h3 class="text-base font-semibold text-black">{{ issue.title }}</h3>
+                            <p class="text-base">Reported {{ issue.created_at | naturaltime }}</p>
+                        </div>
+                        <a href="{% url 'IssuePage' id=issue.id %}" class="m-4">
+                            <img src="/static/images/arrow-next.svg" alt="arrow-next" class="w-8 h-8">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="container my-4 w-[50%] m-4">
+                    <h2 class="text-black text-2xl text-left font-bold my-4">Open Issues by category</h2>
+                    <canvas id="categoryChart" class="w-full h-full"></canvas>
+                </div>
+
+            </div>
+        </div>
+        <!-- Overview -->
+        
+        <!-- Issues -->
+        <div id="Issues" class="container my-4 dash-tab hidden">
+
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="whitespace-nowrap">
+                    <tr>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-black">
+                        Issue
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Status
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Category
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Reported At
+                      </th>
+            
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Action
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="whitespace-nowrap">
+                    {% for issue in issues %}
+                    <tr class="border-y border-gray-200">
+                        <!-- Title -->
+                      <td class="px-6 py-4 text-sm text-left">
+                        <a href="{% url 'IssuePage' id=issue.id %}" class="text-blue-500">{{ issue.title }}</a>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-6 py-4 text-sm">
+                        {% if issue.status == "OPEN" %}
+                        <span class="block text-center py-0.5 border-2 border-red-500 text-red-500 font-semibold rounded text-xs">Open</span>
+                        {% elif issue.status == "IN_PROGRESS" %}
+                        <span class="block text-center py-0.5 border-2 border-orange-500 text-orange-500 font-semibold rounded text-xs">In Progress</span>
+                        {% else %}
+                        <span class="block text-center py-0.5 border-2 border-green-500 text-green-500 font-semibold rounded text-xs">Resolved</span>
+                        {% endif %}
+                      </td>
+
+
+                      <td class="px-6 py-4 text-sm">
+                        {{ issue.category }}
+                      </td>
+
+                      <td class="px-6 py-4 text-sm">
+                        {{ issue.created_at  }}
+                      </td>
+
+                        <td class="px-6 py-4">
+                            <div class="relative inline-block">
+                                <button class="mr-4 issue-edit" title="Edit" data-issueID="{{ issue.id  }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 fill-blue-500 hover:fill-blue-700" viewBox="0 0 348.882 348.882">
+                                        <path d="m333.988 11.758-.42-.383A43.363 43.363 0 0 0 304.258 0a43.579 43.579 0 0 0-32.104 14.153L116.803 184.231a14.993 14.993 0 0 0-3.154 5.37l-18.267 54.762c-2.112 6.331-1.052 13.333 2.835 18.729 3.918 5.438 10.23 8.685 16.886 8.685h.001c2.879 0 5.693-.592 8.362-1.76l52.89-23.138a14.985 14.985 0 0 0 5.063-3.626L336.771 73.176c16.166-17.697 14.919-45.247-2.783-61.418zM130.381 234.247l10.719-32.134.904-.99 20.316 18.556-.904.99-31.035 13.578zm184.24-181.304L182.553 197.53l-20.316-18.556L294.305 34.386c2.583-2.828 6.118-4.386 9.954-4.386 3.365 0 6.588 1.252 9.082 3.53l.419.383c5.484 5.009 5.87 13.546.861 19.03z" data-original="#000000" />
+                                        <path d="M303.85 138.388c-8.284 0-15 6.716-15 15v127.347c0 21.034-17.113 38.147-38.147 38.147H68.904c-21.035 0-38.147-17.113-38.147-38.147V100.413c0-21.034 17.113-38.147 38.147-38.147h131.587c8.284 0 15-6.716 15-15s-6.716-15-15-15H68.904C31.327 32.266.757 62.837.757 100.413v180.321c0 37.576 30.571 68.147 68.147 68.147h181.798c37.576 0 68.147-30.571 68.147-68.147V153.388c.001-8.284-6.715-15-14.999-15z" data-original="#000000" />
+                                    </svg>
+                                </button>
+                                <div id="issueEditDropDown-{{ issue.id  }}" class="z-10 absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
+                                    <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                        <a href="#" data-issueID="{{ issue.id  }}" class="issue-status block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" data-status="OPEN">Open</a>
+                                        <a href="#" data-issueID="{{ issue.id  }}" class="issue-status block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" data-status="IN_PROGRESS">In Progress</a>
+                                        <a href="#" data-issueID="{{ issue.id  }}" class="issue-status block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem" data-status="RESOLVED">Resolved</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="mr-4 issue-delete" title="Delete" data-issueID="{{ issue.id  }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 fill-red-500 hover:fill-red-700" viewBox="0 0 24 24">
+                                    <path d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z" data-original="#000000" />
+                                    <path d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z" data-original="#000000" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+        </div>
+
+        <!-- Users -->
+        <div id="Users" class="container my-4 dash-tab hidden">
+            <h2 class="text-black text-2xl text-left font-bold my-4">All Users</h2>
+            <div class="flex items-center justify-between">
+                <div class="container my-4 w-[50%] border-r-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div id="Search" class="container my-4 dash-tab hidden">
+            <h2 class="text-black text-2xl text-left font-bold my-4">Search</h2>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+
+{% compress js %}
+<script src="{% static 'scripts/staff_dashboard.js' %}"></script>
+{% endcompress %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

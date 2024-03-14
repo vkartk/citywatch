@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import JsonResponse, QueryDict
+
 
 import json
 from .models import Issue, IssueCategory
@@ -119,6 +121,7 @@ def StaffDashboard(request):
     
     issues = Issue.objects.all().order_by('-created_at')
     categories = IssueCategory.objects.all()
+    users = User.objects.all()
     statusCounts = {}
     for statusKey, statusLabel in Issue.STATUS_CHOICES:
         statusCounts[statusLabel] = Issue.objects.filter(status=statusKey).count()
@@ -127,6 +130,7 @@ def StaffDashboard(request):
         "issues": issues,
         "categories": categories,
         "statusCounts": statusCounts,
+        "users": users,
     }
 
     return render(request, "pages/staff_dashboard.html", context)

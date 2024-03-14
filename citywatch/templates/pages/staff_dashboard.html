@@ -158,12 +158,46 @@
         <!-- Users -->
         <div id="Users" class="container my-4 dash-tab hidden">
             <h2 class="text-black text-2xl text-left font-bold my-4">All Users</h2>
-            <div class="flex items-center justify-between">
-                <div class="container my-4 w-[50%] border-r-2">
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                  <thead class="whitespace-nowrap">
+                    <tr>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-black">
+                        Username
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        email
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Created At
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Last Sign In
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="whitespace-nowrap">
+                    {% for user in users %}
+                    <tr class="border-y border-gray-200">
+                      <td class="px-6 py-4 text-sm text-left">
+                        {{ user.username }}
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            {{ user.email }}
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            {{ user.date_joined }}
+                        </td>
+                        <td class="px-6 py-4 text-sm">
+                            {{ user.last_login }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-
+                            
         <!-- Search -->
         <div id="Search" class="container my-4 dash-tab hidden">
             <h2 class="text-black text-2xl text-left font-bold my-4">Search</h2>

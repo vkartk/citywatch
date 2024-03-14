@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             let issueID = button.dataset.issueid;
             let status = button.dataset.status;
-            handleIssueStatus(issueID, status);
+            let origin = button.dataset.origin;
+            handleIssueStatus(issueID, status, origin);
         });
     });
 
@@ -21,16 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
     issueDeleteButtons.forEach(button => {
         button.addEventListener('click', () => {
             let issueID = button.dataset.issueid;
-            handleIssueDelete(issueID);
+            let origin = button.dataset.origin;
+            handleIssueDelete(issueID, origin);
         });
     });
 
     let issueEditButtons = document.querySelectorAll('.issue-edit');
     issueEditButtons.forEach(button => {
         button.addEventListener('click', () => {
+
             let issueID = button.dataset.issueid;
-            let dropDown = document.getElementById(`issueEditDropDown-${issueID}`);
-            dropDown.classList.toggle('hidden');
+            let dropDowns = document.querySelectorAll(`.issueEditDropDown-${issueID}`);
+            dropDowns.forEach(dropDown => {
+                dropDown.classList.toggle('hidden');
+            });
         });
     });
 });
@@ -126,7 +131,7 @@ const getCookie = name => {
 }
 
 
-const handleIssueStatus = (issueID, status) => {
+const handleIssueStatus = (issueID, status, origin) => {
     console.log('issueID: ', issueID);
 
     const csrftoken = getCookie('csrftoken');
@@ -144,12 +149,12 @@ const handleIssueStatus = (issueID, status) => {
     }).then(response => {
         return response.json();
     }).then(data => {
-       localStorage.setItem('navTab', 'Issues');
+       localStorage.setItem('navTab', origin);
         location.reload();
     });
 };
 
-const handleIssueDelete = issueID => {
+const handleIssueDelete = (issueID, origin) => {
     const csrftoken = getCookie('csrftoken');
     fetch(`/api/issue/${issueID}`, {
         method: 'DELETE',
@@ -160,7 +165,7 @@ const handleIssueDelete = issueID => {
     }).then(response => {
         return response.json();
     }).then(data => {
-        localStorage.setItem('navTab', 'Issues');
+        localStorage.setItem('navTab', origin);
         location.reload();
     });
 };

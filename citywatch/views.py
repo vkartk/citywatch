@@ -133,6 +133,11 @@ def StaffDashboard(request):
         "users": users,
     }
 
+    query = request.GET.get('query')
+    if query:
+        issues = Issue.objects.filter(title__icontains=query)
+        context['searchResults'] = issues
+
     return render(request, "pages/staff_dashboard.html", context)
 
 

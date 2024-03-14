@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 
 from .models import Issue, IssueCategory
 from .forms import IssueForm, SignUpForm, SignInForm
@@ -109,3 +110,48 @@ def IssuePage(request, id):
     issue = Issue.objects.get(id=id)
 
     return render(request, "pages/issue.html", {"issue": issue})
+
+
+def StaffDashboard(request):
+    if not request.user.is_authenticated or not request.user.is_staff:
+        return redirect('signin')
+    
+    issues = Issue.objects.all().order_by('-created_at')
+    categories = IssueCategory.objects.all()
+    statusCounts = {}
+    for statusKey, statusLabel in Issue.STATUS_CHOICES:
+        statusCounts[statusLabel] = Issue.objects.filter(status=statusKey).count()
+
+    context = {
+        "issues": issues,
+        "categories": categories,
+        "statusCounts": statusCounts,
+    }
+
+    return render(request, "pages/staff_dashboard.html", context)
+
+
+def IssueAPI(request, id=None):
+    if id:
+        issue = Issue.objects.get(id=id)
+        return JsonResponse(issue.to_dict())
+    else:
+        issues = Issue.objects.all()
+        return JsonResponse([issue.to_dict() for issue in issues], safe=False)    
+
+def CategoryAPI(request, id=None):
+    if id:
+        category = IssueCategory.objects.get(id=id)
+        issuesInCategory = Issue.objects.filter(category=category)
+        category = category.to_dict()
+        category['issueCount'] = issuesInCategory.count()
+        return JsonResponse(category)
+    else:
+        categories = IssueCategory.objects.all()
+        categoryList = []
+        for category in categories:
+            issuesInCategory = Issue.objects.filter(category=category)
+            category = category.to_dict()
+            category['issueCount'] = issuesInCategory.count()
+            categoryList.append(category)
+        return JsonResponse(categoryList, safe=False)

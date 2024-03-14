@@ -36,14 +36,41 @@ class Issue(models.Model):
     def __str__(self):
         return self.title
     
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "location": self.location,
+            "image": self.image.url if self.image else None,
+            "category": self.category.name,
+            "city": self.city,
+            "pinCode": self.pinCode,
+            "status": self.status,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+        }
+    
 
 class IssueCategory(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to='images/category/')
 
 
     def __str__(self):
         return self.name
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "image": self.image.url if self.image else None,
+        }
+
     
 class IssueComment(models.Model):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)

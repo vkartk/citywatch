@@ -16,5 +16,12 @@ urlpatterns = [
     path('signout/', views.SignOut, name='signout'),
 
     path('dashboard/', views.Dashboard, name='Dashboard'),
+    path('staff/', views.StaffDashboard, name='StaffDashboard'),
+
+    path('api/issues/', views.IssueAPI, name='IssueAPI'),
+    path('api/issue/<int:id>/', views.IssueAPI, name='IssueAPI'),
+    path('api/categories/', views.CategoryAPI, name='CategoryAPI'),
+    path('api/category/<int:id>/', views.CategoryAPI, name='CategoryAPI'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

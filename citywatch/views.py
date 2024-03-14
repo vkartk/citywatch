@@ -196,3 +196,14 @@ def CategoryAPI(request, id=None):
 
             categoryList.append(category)
         return JsonResponse(categoryList, safe=False)
+    
+
+def Search(request):
+
+    query = request.GET.get('query')
+
+    if query:
+        issues = Issue.objects.filter(title__icontains=query)
+        return render(request, "pages/search.html", {"issues": issues})
+    
+    return render(request, "pages/search.html", {"issues": []})

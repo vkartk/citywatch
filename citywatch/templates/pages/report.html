@@ -27,7 +27,9 @@
                     {% render_field form.pinCode placeholder="Pincode" class="px-2 py-3 w-full text-sm"%}
                 </div>
 
-                {% render_field form.email placeholder="Email" class="px-2 py-3 w-full text-sm"%}
+                {% if not user.is_authenticated %}
+                    {% render_field form.email placeholder="Email" class="px-2 py-3 w-full text-sm"%}
+                {% endif %}
 
                 <div class="flex items-center">
                     <p class="mr-4 text-base ">Enable location access to assist in pinpointing the issue</p>

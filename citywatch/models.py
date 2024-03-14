@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 
 class Issue(models.Model):
     title = models.CharField(max_length=100)
@@ -9,10 +10,15 @@ class Issue(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to='images/issue/')
     category = models.ForeignKey('IssueCategory', on_delete=models.CASCADE)
 
-    email = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
-    city = models.CharField(max_length=100)
-    pinCode = models.IntegerField(validators=[MinValueValidator(100000), MaxValueValidator(999999)])
+    city = models.CharField(max_length=100,blank=True, null=True)
+    pinCode = models.IntegerField(
+        validators=[MinValueValidator(100000), MaxValueValidator(999999)],
+        blank=True, 
+        null=True
+    )
 
     STATUS_CHOICES = (
         ('OPEN', 'Open'),
@@ -41,7 +47,7 @@ class IssueCategory(models.Model):
     
 class IssueComment(models.Model):
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
-    author = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from .models import Issue, IssueCategory
 from .forms import IssueForm, SignUpForm, SignInForm
+from .utils import handle_SignIn, associate_user_issues
 
 def home(request):
     issues = Issue.objects.all().order_by('-created_at')
@@ -20,8 +21,12 @@ def report(request):
     if request.method == "POST":
         form = IssueForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            issue = form.save(commit=False)
+            if request.user.is_authenticated:
+                issue.user = request.user
+            issue.save()
             messages.success(request, "Issue reported successfully!")
+            return redirect('IssuePage', id=issue.id)
         else:
             messages.error(request, "Issue report failed!")
     else:
@@ -37,7 +42,7 @@ def SignUp(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             messages.success(request, "Account created successfully!")
 
             userData = {
@@ -45,7 +50,10 @@ def SignUp(request):
                 'password' : form.cleaned_data['password1'],
             }
 
-            return handle_SignIn(request, userData)
+            handle_SignIn(request, userData)
+            associate_user_issues(form.cleaned_data['email'], user)
+
+            return redirect('Dashboard')
 
         else:
             messages.error(request, "Account creation failed!")
@@ -68,8 +76,12 @@ def SignIn(request):
                 'password' : form.cleaned_data['password'],
             }
 
-            if(handle_SignIn(request, userData)):
-                return redirect('Dashboard')
+            handle_SignIn(request, userData)
+
+            associate_user_issues(request.user.email , request.user)
+
+            return redirect('Dashboard')
+        
         else:
             messages.error(request, "Sign in failed!")
 
@@ -97,15 +109,3 @@ def IssuePage(request, id):
     issue = Issue.objects.get(id=id)
 
     return render(request, "pages/issue.html", {"issue": issue})
-
-def handle_SignIn(request, userData):
-
-    user = authenticate(username=userData['username'], password=userData['password'])
-    if user is not None:
-        login(request, user)
-        messages.success(request, "Sign in successful!")
-        return True
-    
-    return False
-
-

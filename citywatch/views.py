@@ -99,7 +99,7 @@ def Dashboard(request):
     if not request.user.is_authenticated:
         return redirect('signin')
 
-    issues = Issue.objects.all().order_by('-created_at')
+    issues = Issue.objects.filter(user=request.user).order_by('-created_at')
     categories = IssueCategory.objects.all()
 
     return render(request, "pages/dashboard.html", {"issues": issues, "categories": categories})

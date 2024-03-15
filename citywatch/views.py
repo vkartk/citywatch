@@ -102,6 +102,9 @@ def Dashboard(request):
 
     if not request.user.is_authenticated:
         return redirect('signin')
+    
+    if request.user.is_staff:
+        return redirect('StaffDashboard')
 
     issues = Issue.objects.filter(user=request.user).order_by('-created_at')
     categories = IssueCategory.objects.all()

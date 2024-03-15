@@ -31,5 +31,4 @@
 .city-bg {
     background-image: url('/static/images/city-bg.jpg');
     background-size: cover;
-    background-position: center;
 }

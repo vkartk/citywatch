@@ -203,7 +203,7 @@ def Search(request):
     query = request.GET.get('query')
 
     if query:
-        issues = Issue.objects.filter(title__icontains=query)
-        return render(request, "pages/search.html", {"issues": issues})
+        searchResults = Issue.objects.filter(title__icontains=query)
+        return render(request, "pages/search.html", {"searchResults": searchResults})
     
     return render(request, "pages/search.html", {"issues": []})

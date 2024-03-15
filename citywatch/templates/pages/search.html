@@ -29,6 +29,59 @@
         </form>
         <p class="text-sm text-gray-400 mt-4">Let's work together to build a thriving community. Every report counts!</p>
     </div>
+
+    {% if searchResults %}
+            <div class="overflow-y-visible mt-4">
+                <table class="w-full">
+                  <thead class="whitespace-nowrap">
+                    <tr>
+                      <th class="px-6 py-4 text-left text-sm font-semibold text-black">
+                        Issue
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Status
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Category
+                      </th>
+                      <th class="px-6 py-4  text-sm font-semibold text-black">
+                        Reported At
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="whitespace-nowrap">
+                    {% for issue in searchResults %}
+                    <tr class="border-y border-gray-200">
+                        <!-- Title -->
+                      <td class="px-6 py-4 text-sm text-left">
+                        <a href="{% url 'IssuePage' id=issue.id %}" class="text-blue-500">{{ issue.title }}</a>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-6 py-4 text-sm">
+                        {% if issue.status == "OPEN" %}
+                        <span class="block text-center py-0.5 border-2 border-red-500 text-red-500 font-semibold rounded text-xs">Open</span>
+                        {% elif issue.status == "IN_PROGRESS" %}
+                        <span class="block text-center py-0.5 border-2 border-orange-500 text-orange-500 font-semibold rounded text-xs px-2">In Progress</span>
+                        {% else %}
+                        <span class="block text-center py-0.5 border-2 border-green-500 text-green-500 font-semibold rounded text-xs">Resolved</span>
+                        {% endif %}
+                      </td>
+
+
+                      <td class="px-6 py-4 text-sm">
+                        {{ issue.category }}
+                      </td>
+
+                      <td class="px-6 py-4 text-sm">
+                        {{ issue.created_at  }}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            </div>
+            {% endif %}
   </div>
   
 </section>

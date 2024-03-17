@@ -53,14 +53,12 @@ async function initMap(position) {
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
-  // The map, centered at Uluru
   let map = new Map(document.getElementById("map"), {
     zoom: 15,
     center: position,
-    mapId: "DEMO_MAP_ID",
+    mapId: "7fd910e2ccd9585d",
   });
 
-  // The marker, positioned at Uluru
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,

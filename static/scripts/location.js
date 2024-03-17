@@ -62,6 +62,6 @@ async function initMap(position) {
   const marker = new AdvancedMarkerElement({
     map: map,
     position: position,
-    title: "Uluru",
+    title: "User Location",
   });
 }

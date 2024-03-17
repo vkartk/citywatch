@@ -26,10 +26,15 @@ const  initMap = async mapData => {
         content: pinGlyph.element,
       });
 
+      const content = `<h3 class='font-bold'>${issue.title}</h3>
+      <p>Category: ${issue.category}</p>
+      <p>Location: ${issue.location}</p>
+      <a href="/issue/${issue.id}" class='text-blue-500'>View Issue</a>
+      `;
       // markers can only be keyboard focusable when they have click listeners
       // open info window when marker is clicked
       marker.addListener("click", () => {
-        infoWindow.setContent(issue.title);
+        infoWindow.setContent(content);
         infoWindow.open(map, marker);
       });
       return marker;
@@ -57,7 +62,10 @@ window.addEventListener("load", async () => {
   const mapData = issues.map(issue => {
     const label = issue['category'].charAt(0).toUpperCase();
     return {
-      title: issue.title, 
+      title: issue.title,
+      id: issue.id,
+      category: issue.category,
+      location: issue.location,
       lat: issue.latitude, 
       lng: issue.longitude,
       label: label

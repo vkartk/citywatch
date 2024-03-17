@@ -40,7 +40,7 @@
                         </div>
                     </label>
                 </div>
-                <div id="image-preview" class="rounded-lg mx-auto text-center cursor-pointer">
+                <div class="rounded-lg mx-auto text-center cursor-pointer">
                     <label for="id_image" class="text-center w-full  min-h-[160px] py-4 px-4 flex flex-col items-center justify-center cursor-pointer border-[1px]  border-[#6b7280] mx-auto  m-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 mb-6 fill-gray-400" viewBox="0 0 24 24">
                             <path d="M22 13a1 1 0 0 0-1 1v4.213A2.79 2.79 0 0 1 18.213 21H5.787A2.79 2.79 0 0 1 3 18.213V14a1 1 0 0 0-2 0v4.213A4.792 4.792 0 0 0 5.787 23h12.426A4.792 4.792 0 0 0 23 18.213V14a1 1 0 0 0-1-1Z" data-original="#000000" />
@@ -51,6 +51,7 @@
                         <p class="text-xs text-gray-400 mt-2">PNG, JPG SVG, WEBP, and GIF are Allowed.</p> 
                     </label>
                 </div>
+                <div id="image-preview" class="rounded-lg mx-auto text-center cursor-pointer"></div>
                 <span id="filename" class="text-gray-500 flex justify-center"></span>
 
                 {% render_field form.description placeholder="Describe the issue..." class="px-2 py-3 w-full text-sm"%}

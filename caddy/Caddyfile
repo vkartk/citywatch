@@ -1,0 +1,21 @@
+# Caddyfile
+
+:80 {
+    # Serve static files from the Django static volume
+    handle /static/* {
+        root * /staticfiles
+        file_server
+    }
+
+    # Serve media files from the Django media volume
+    handle /media/* {
+        root * /media
+        file_server
+    }
+
+    # Log requests for debugging
+    log {
+        output stdout
+        format single_field common_log
+    }
+}

@@ -1,20 +1,25 @@
 # Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM python:3.11
 
-# Set the working directory in the container
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set the working directory
 WORKDIR /app
 
-# Copy the requirements file into the container
-COPY requirements.txt .
-
-# Install the dependencies
+# Install dependencies
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy the project files
 COPY . /app/
 
-# Expose the port that the Django app will run on
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
+# Expose the port
 EXPOSE 8000
 
-# Define the command to run the Django application
+# Start the Django application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "civic.wsgi:application"]

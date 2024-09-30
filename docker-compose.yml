@@ -1,0 +1,28 @@
+services:
+  django:
+    build: .
+    container_name: citywatch
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - civic-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: citywatch_nginx
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - .:/app
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+    networks:
+      - civic-network
+
+networks:
+  civic-network:

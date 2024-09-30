@@ -24,8 +24,8 @@ RUN python manage.py makemigrations
 # Migrate
 RUN python manage.py migrate
 
-# Expose the port
+# Expose the port for Gunicorn
 EXPOSE 8000
 
-# Start the Django application
+# Start the Django application using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "civic.wsgi:application"]

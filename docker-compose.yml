@@ -16,7 +16,7 @@ services:
     container_name: citywatch_nginx
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - .:/app
+      - ./staticfiles:/app/static
     ports:
       - "8056:80"
     depends_on:

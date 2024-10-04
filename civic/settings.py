@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import environ
 
+from urllib.parse import urlparse
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,6 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env( os.path.join(BASE_DIR, '.env'))
+
+# Get DATABASE_URL from the environment, or None if it doesn't exist
+database_url = os.getenv('DATABASE_URL', None)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -84,16 +88,34 @@ WSGI_APPLICATION = 'civic.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env.int('DB_PORT', default=3306),
+if database_url:
+    # Parse DATABASE_URL if it exists
+    parsed_url = urlparse(database_url)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': parsed_url.path[1:],  # Removes the leading `/` from the path
+            'USER': parsed_url.username,
+            'PASSWORD': parsed_url.password,
+            'HOST': parsed_url.hostname,
+            'PORT': parsed_url.port or 3306,  # Use the default MySQL port if not provided
+        }
     }
-}
+    
+else:
+
+    # Fallback to individual environment variables if DATABASE_URL is not provided
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env.int('DB_PORT', default=3306),
+        }
+    }
 
 
 # Password validation

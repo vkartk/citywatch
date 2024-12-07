@@ -1,5 +1,5 @@
 # Stage 1: Build stage
-FROM python:3.11-alpine as builder
+FROM python:3.11-alpine AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \

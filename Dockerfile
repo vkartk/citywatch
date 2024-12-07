@@ -18,6 +18,7 @@ RUN apk add --no-cache \
     python3-dev \
     py3-pip \
     openssl-dev \
+    bash \
     && pip install --upgrade pip
 
 # Copy dependencies file

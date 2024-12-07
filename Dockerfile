@@ -21,9 +21,6 @@ RUN python manage.py collectstatic --noinput
 # Make Migrations
 RUN python manage.py makemigrations
 
-# Migrate
-RUN python manage.py migrate
-
 # Expose the port for Gunicorn
 EXPOSE 8000
 

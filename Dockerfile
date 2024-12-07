@@ -18,7 +18,6 @@ RUN apk add --no-cache \
     python3-dev \
     py3-pip \
     openssl-dev \
-    bash \
     && pip install --upgrade pip
 
 # Copy dependencies file
@@ -41,6 +40,7 @@ WORKDIR /app
 RUN apk add --no-cache \
     mariadb-connector-c-dev \
     libffi \
+    bash \
     openssl
 
 # Copy runtime Python dependencies from builder stage

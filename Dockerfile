@@ -1,20 +1,52 @@
-# Use the official Python image from the Docker Hub
+# Stage 1: Build stage
+FROM python:3.11-alpine as builder
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache \
+    build-base \
+    mariadb-dev \
+    musl-dev \
+    libffi-dev \
+    gcc \
+    python3-dev \
+    py3-pip \
+    openssl-dev \
+    && pip install --upgrade pip
+
+# Copy dependencies file
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --prefix=/install --no-cache-dir -r requirements.txt
+
+# Stage 2: Production stage
 FROM python:3.11-alpine
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Install system dependencies required to build mysqlclient
-RUN apk add --no-cache \
-    gcc \
-    musl-dev \
-    mariadb-dev \
-    pkgconfig
-
-
-# Set the working directory
+# Set working directory
 WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache \
+    mariadb-connector-c-dev \
+    libffi \
+    openssl
+
+# Copy runtime Python dependencies from builder stage
+COPY --from=builder /install /usr/local
+
+# Copy application code
+COPY . .
 
 # Install dependencies
 COPY requirements.txt /app/

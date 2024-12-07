@@ -5,6 +5,14 @@ FROM python:3.11-alpine
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+# Install system dependencies required to build mysqlclient
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    mariadb-dev \
+    pkgconfig
+
+
 # Set the working directory
 WORKDIR /app
 

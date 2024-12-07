@@ -18,9 +18,6 @@ COPY . /app/
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Make Migrations
-RUN python manage.py makemigrations
-
 # Expose the port for Gunicorn
 EXPOSE 8000
 

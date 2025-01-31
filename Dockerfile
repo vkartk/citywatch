@@ -23,7 +23,9 @@ RUN apk add --no-cache \
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --upgrade pip && \
+RUN python -m venv /app/venv && \
+    . /app/venv/bin/activate && \
+    pip install --upgrade pip && \
     pip install --prefix=/install --no-cache-dir -r requirements.txt
 
 # Stage 2: Production stage

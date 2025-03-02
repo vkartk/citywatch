@@ -58,8 +58,8 @@ COPY . .
 RUN chown -R django-user:django-user /app
 
 # Create and set permissions for static and media directories
-RUN mkdir -p /app/static /app/media && \
-    chown -R django-user:django-user /app/static /app/media
+RUN mkdir -p /app/static /app/staticfiles /app/media && \
+    chown -R django-user:django-user /app/static /app/staticfiles /app/media
 
 # Switch to non-root user
 USER django-user

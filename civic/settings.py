@@ -12,17 +12,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-import environ
 import dj_database_url
 
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env( os.path.join(BASE_DIR, '.env'))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -31,9 +27,9 @@ environ.Env.read_env( os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG', default=False)
+DEBUG = os.environ.get('DEBUG', default=False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default=['*'])
 
 
 # Application definition
@@ -88,7 +84,7 @@ WSGI_APPLICATION = 'civic.wsgi.application'
 # Check if DATABASE_URL exists, otherwise fall back to manual settings
 DATABASES = {
     'default': dj_database_url.config(
-        default=env('DATABASE_URL', default=None)
+        default=os.environ.get('DATABASE_URL', default=None)
     )
 }
 
